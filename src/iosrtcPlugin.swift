@@ -740,6 +740,13 @@ class iosrtcPlugin : CDVPlugin {
 		// Store into the dictionary.
 		self.pluginMediaStreamRenderers[id] = pluginMediaStreamRenderer
 
+        // If this is the first renderer, stop the device from going to sleep
+        if self.pluginMediaStreamRenderers.count == 1 {
+            // Acquire a reference to the local UIApplication singleton
+            let app = UIApplication.shared;
+            app.isIdleTimerDisabled = true;
+        }
+
 		// Run it.
 		pluginMediaStreamRenderer.run()
 	}
@@ -813,6 +820,13 @@ class iosrtcPlugin : CDVPlugin {
 
 		// Remove from the dictionary.
 		self.pluginMediaStreamRenderers[id] = nil
+
+        // If this was the last renderer, stop the device from going to sleep
+        if self.pluginMediaStreamRenderers.isEmpty {
+            // Acquire a reference to the local UIApplication singleton
+            let app = UIApplication.shared;
+            app.isIdleTimerDisabled = false;
+        }
 	}
 
 
